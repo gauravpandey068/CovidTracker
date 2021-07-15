@@ -3,7 +3,7 @@ package com.gaurav.covidtracker
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -45,13 +45,13 @@ class SearchActivity : AppCompatActivity() {
             val response = try {
                 RetrofitBuilder.api.getCountryData(counterName)
             } catch (e: IOException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBarSearch.isVisible = false
+                Toast.makeText(this@SearchActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBarSearch.isVisible = true
                 return@launchWhenCreated
 
             } catch (e: HttpException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBarSearch.isVisible = false
+                Toast.makeText(this@SearchActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBarSearch.isVisible = true
                 return@launchWhenCreated
 
             }
@@ -105,6 +105,7 @@ class SearchActivity : AppCompatActivity() {
         val pieData = PieData(pieDataSet)
         pieData.setDrawValues(true)
 
+        binding.pieChart.legend.isEnabled = false
         binding.pieChart.description.isEnabled = false
         binding.pieChart.data = pieData
     }

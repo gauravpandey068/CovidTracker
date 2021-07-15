@@ -3,7 +3,7 @@ package com.gaurav.covidtracker
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -19,7 +19,6 @@ import com.github.mikephil.charting.data.PieEntry
 import retrofit2.HttpException
 import java.io.IOException
 
-const val TAG = "Main Activity"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -39,36 +38,36 @@ class MainActivity : AppCompatActivity() {
             val data = try {
                 RetrofitBuilder.api.getWorldData()
             } catch (e: IOException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBar.isVisible = false
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBar.isVisible = true
                 return@launchWhenCreated
 
             } catch (e: HttpException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBar.isVisible = false
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBar.isVisible = true
                 return@launchWhenCreated
 
             }
             val response = try {
                 RetrofitBuilder.api.getCountriesData()
             } catch (e: IOException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBar.isVisible = false
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBar.isVisible = true
                 return@launchWhenCreated
 
             } catch (e: HttpException) {
-                Log.d(TAG, e.message.toString())
-                binding.progressBar.isVisible = false
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                binding.progressBar.isVisible = true
                 return@launchWhenCreated
 
             }
             if (response.isSuccessful && response.body() != null && data.isSuccessful && data.body() != null) {
                 val post: World = data.body() as World
-                filldata(post)
+                fillData(post)
                 countryAdapter.countries = response.body()!!
 
             } else {
-                Log.d(TAG, "Response not Successful")
+                Toast.makeText(this@MainActivity, "Response not Successful", Toast.LENGTH_LONG).show()
             }
             binding.progressBar.isVisible = false
         }
@@ -95,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun filldata(post: World) {
+    private fun fillData(post: World) {
         binding.cardView.isVisible = true
         binding.textViewWorld.text = "World"
         binding.textViewWorldTotalCase.text = "Total Case:\n${post.cases.toString()}"
@@ -130,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         val pieData = PieData(pieDataSet)
         pieData.setDrawValues(true)
 
+        binding.pieChartWorld.legend.isEnabled = false
         binding.pieChartWorld.description.isEnabled = false
         binding.pieChartWorld.data = pieData
     }
