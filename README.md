@@ -5,6 +5,6 @@ Covid Tracker Android App
 https://disease.sh/v2/countries
 
 # Additional library Uses 
-https://github.com/PhilJay/MPAndroidChart#examples
-https://square.github.io/retrofit/
-https://github.com/bumptech/glide
+https://github.com/PhilJay/MPAndroidChart#examples <br />
+https://square.github.io/retrofit/ <br />
+https://github.com/bumptech/glide <br />
